@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = EventRequestValidator.class)
 public @interface ValidEventRequest {
 
-    String message() default "is not valid";
+    String message() default "reminders cannot be in the past";
 
     Class<?>[] groups() default {};
 
