@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestControllerAdvice
 public class ApiAdvice {
 
-    private static final String FIELD_NAME_FIELD_MESSAGE_SEPARATOR = ": ";
-    private static final String FIELD_ERRORS_SEPARATOR = ", ";
+    private static final String NAME_MESSAGE_SEPARATOR = ": ";
+    private static final String ALL_ERRORS_SEPARATOR = ", ";
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -24,8 +25,17 @@ public class ApiAdvice {
     }
 
     private String getDetail(MethodArgumentNotValidException e) {
+        return Stream.concat(globalErrors(e), fieldErrors(e))
+                .collect(Collectors.joining(ALL_ERRORS_SEPARATOR));
+    }
+
+    private Stream<String> globalErrors(MethodArgumentNotValidException e) {
+        return e.getGlobalErrors().stream()
+                .map(error -> String.join(NAME_MESSAGE_SEPARATOR, error.getObjectName(), error.getDefaultMessage()));
+    }
+
+    private Stream<String> fieldErrors(MethodArgumentNotValidException e) {
         return e.getFieldErrors().stream()
-                .map(error -> String.join(FIELD_NAME_FIELD_MESSAGE_SEPARATOR, error.getField(), error.getDefaultMessage()))
-                .collect(Collectors.joining(FIELD_ERRORS_SEPARATOR));
+                .map(error -> String.join(NAME_MESSAGE_SEPARATOR, error.getField(), error.getDefaultMessage()));
     }
 }
