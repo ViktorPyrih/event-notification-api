@@ -14,6 +14,6 @@ import java.util.List;
 public record EventRequest(@NotEmpty @Size(max = 64) String name,
                            String notes,
                            @NotEmpty @Size(max = 64) String key,
-                           @NotNull @Future(message = "cannot be in the past") ZonedDateTime dateTime,
+                           @NotNull @Future ZonedDateTime dateTime,
                            @NotEmpty List<@Valid Reminder> reminders) {
 }

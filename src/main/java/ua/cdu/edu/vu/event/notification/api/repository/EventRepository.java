@@ -45,7 +45,7 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
     """, nativeQuery = true)
     List<EventEntity> findAllLostEvents(ZonedDateTime dateTime);
 
-    List<EventEntity> findAllByKeyAndCreatedBy(String key, String createdBy);
+    List<EventEntity> findAllByKeyAndCreatedByOrderByDateTime(String key, String createdBy);
 
     @Transactional
     @Modifying

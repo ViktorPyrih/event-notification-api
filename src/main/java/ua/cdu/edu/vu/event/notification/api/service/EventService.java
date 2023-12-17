@@ -50,7 +50,7 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public List<EventEntity> getAllByKey(String key, ApiClient apiClient) {
-        return eventRepository.findAllByKeyAndCreatedBy(key, apiClient.clientId());
+        return eventRepository.findAllByKeyAndCreatedByOrderByDateTime(key, apiClient.clientId());
     }
 
     public void requireEventExistsById(long id) {
